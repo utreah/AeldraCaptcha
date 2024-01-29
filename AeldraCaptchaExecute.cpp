@@ -3,22 +3,32 @@
 #include <TlHelp32.h>
 #include <iostream>
 #include "proc.h"
+#include <string>
 #include <processthreadsapi.h>
-
+#pragma warning(disable : 4996)
 int main()
 {        
-    std::cout << "NOTE: This software won't terminate all aeldra client(s) at the same time." << std::endl;
-    std::cout << "Each client will be terminated after X minutes." << std::endl;
-    std::cout << "For example, if you set sleepTime for 10, first client will be terminated as soon as you run this." << std::endl;
-    std::cout << "And, next client will be terminated after 10 mins" << std::endl;
-    std::cout << "DO NOT FORGET TO RUN IT AS ADMINSTRATOR! -Utreah" << std::endl;
+    wchar_t procName[20] = L"bin_aeldra_xxx.exe";
+    wchar_t binVersion[] = L"";
+    std::wcin >> binVersion;
+    wchar_t* bin;
+    bin = wcsstr(procName, L"xxx");
+    wcsncpy(bin, binVersion, sizeof(binVersion - 1));
+    wcscat(procName, L".exe");
+    std::wcout << procName << std::endl;;
+
+    std::cout << "NOT: Bu yazılım tüm clientleri aynı anda kapatmaz." << std::endl;
+    std::cout << "Clientler tek tek belirlediğiniz zamana göre kapanır." << std::endl;
+    std::cout << "Örnek olarak, eğer bekleme süresini 10dk olarak ayarlarsanız ilk client programı çalıştırdığınız gibi." << std::endl;
+    std::cout << "diğer client ise 10 dakika ardından kapanır." << std::endl;
+    std::cout << "Yönetici olarak çalıştırmayı unutmayın. -Utreah" << std::endl;
     unsigned int sleepTime;
     std::cout << "Sleep Time to terminate the process(in minutes) : ";
     std::cin >> sleepTime;
     system("cls");
     while (true)
     {
-        DWORD procId = getProcId(L"bin_aeldra_473.exe");
+        DWORD procId = getProcId(procName);
         HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, procId);
         std::cout << "Process Id :" << procId<<std::endl;
 
